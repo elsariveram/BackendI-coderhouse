@@ -1,9 +1,10 @@
 import { create } from 'domain';
 import fs from 'fs/promises';
 import path from 'path';
+import __dirname from '../utils.js';
 
 const carritosFilePath = path.resolve('data', 'carritos.json');
-
+console.log(carritosFilePath); 
 export default class CartManager {
     //constructor
     constructor() {

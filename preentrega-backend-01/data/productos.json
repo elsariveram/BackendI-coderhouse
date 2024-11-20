@@ -13,5 +13,35 @@
       "https://www.paris.cl/dw/image/v2/BCHW_PRD/on/demandware.static/-/Sites-paris-marketplace/default/dw486a0c80/images/imagenes-productos/800/MKGM/MKGMAMMG0Y-0300-001.png?sw=320&sh=409&sm=fit"
     ],
     "status": true
+  },
+  {
+    "id": 3,
+    "title": "ipad",
+    "name": "ipad adxs12",
+    "description": "ipad 16 ultima generacion",
+    "code": "iphone012fds",
+    "price": 400,
+    "stock": 50,
+    "category": "ipads",
+    "thumbnails": [
+      "https://digitek.cl/cdn/shop/files/iphone12greenverdedigitekchile.png?v=1718394747&width=1200",
+      "https://www.paris.cl/dw/image/v2/BCHW_PRD/on/demandware.static/-/Sites-paris-marketplace/default/dw486a0c80/images/imagenes-productos/800/MKGM/MKGMAMMG0Y-0300-001.png?sw=320&sh=409&sm=fit"
+    ],
+    "status": true
+  },
+  {
+    "id": 4,
+    "title": "ipad",
+    "name": "ipad adxs12",
+    "description": "ipad 16 ultima generacion",
+    "code": "iphone012fds",
+    "price": 400,
+    "stock": 50,
+    "category": "ipads",
+    "thumbnails": [
+      "https://digitek.cl/cdn/shop/files/iphone12greenverdedigitekchile.png?v=1718394747&width=1200",
+      "https://www.paris.cl/dw/image/v2/BCHW_PRD/on/demandware.static/-/Sites-paris-marketplace/default/dw486a0c80/images/imagenes-productos/800/MKGM/MKGMAMMG0Y-0300-001.png?sw=320&sh=409&sm=fit"
+    ],
+    "status": true
   }
 ]
