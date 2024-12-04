@@ -1,0 +1,48 @@
+{{!-- //FORMULARIO INGRESO --}}
+<div>
+    <h1>Registro de Productos</h1>
+    <form id="registerForm">
+
+        <label>title</label>
+        <input name="title" type="text">
+        <br/>
+        <label>name</label>
+        <input name="name" type="text">
+        <br/>
+        <label>description</label>
+        <input name="description" type="text">
+        <br/>
+        <label>code</label>
+        <input name="code" type="text">
+        <br/>
+        <label>price</label>
+        <input name="price" type="number">
+        <br/>
+        <label>stock</label>
+        <input name="stock" type="number">
+        <br/>
+         <label>category</label>
+        <input name="category" type="text">
+        <br/>
+         <label>thumbnails</label>
+        <input type="url" placeholder="Ingrese la URL de la imagen" name="thumbnails">
+        <br/>
+        <input type="submit">
+    </form>
+   
+</div>
+
+{{!-- VISTA REALTIME WEBSOCKET PRODUCTOS BASE DE DATOS --}}
+
+  <h1>Productos</h1>
+  <div class="product-container" id="productContainer">
+    <!-- Productos generados dinámicamente se insertarán aquí -->
+  </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/register.js"></script>
+<link rel="stylesheet" href="/css/register.css">  
+
+
+
+
