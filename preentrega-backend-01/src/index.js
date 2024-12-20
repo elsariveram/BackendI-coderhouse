@@ -7,6 +7,8 @@ import viewRouter from './routes/views.router.js'
 // Rutas de productos y carrito
 import productRouter from "./routes/products.router.js";
 import cartRouter from "./routes/carts.router.js";
+// MOngoDB
+import mongoose from 'mongoose';
 
 
 //declaramos express y asignamos el puerto
@@ -105,3 +107,17 @@ socketServer.on('connection', socket => {
         fetchProducts();
     })
 })
+
+
+//CONNECT MONGO DB
+
+const DBPATH = 'mongodb+srv://elsariveramarchant:cGTNQdfXXYBZJrbP@cluster0.gakmh.mongodb.net/PrimeraBaseDatosMongoAtlas?retryWrites=true&w=majority&appName=Cluster0';
+const connectMongoDB = async () => {
+    try {
+       await mongoose.connect(DBPATH);
+       console.log("Conectado a la base de datos de Mongo Atlas");
+    } catch (error) {
+        console.log("Error al conectar a la base de datos:", error);
+    };}
+
+connectMongoDB();

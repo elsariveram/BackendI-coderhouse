@@ -11,25 +11,92 @@ import express, { Router } from 'express';
 //TODAS LAS APIS------------------------
 
 // Ruta para listar  todos los productos 
-//http://localhost:8080/api/products?limit=1
-    router.get('/', async(req, res) => {
-     
-      try {
-        const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
-        const products = await productManager.getAllProducts(limit);
-        res.json(products);
-      }
-      catch (error) {
-        console.log(error);
-      }
-      
-    });
+//ejemplo: http://localhost:8080/api/products?limit=1
+router.get('/', async (req, res) => {
 
-// Ruta para obtener un producto por su ID. 
-    router.get('/:pid', async (req, res) => {
+  try {
+      // Obtener los parámetros de la query
       
+      const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+      const page = req.query.page ? parseInt(req.query.page) : 1;
+      const sort = req.query.sort === 'asc' ? { price: 1 } : req.query.sort === 'desc' ? { price: -1 } : {};
+      const query = req.query.query || ''; // Filtro por categoría o disponibilidad
+      console.log("query",req.query.sort)
+
+      // Calcular el número de productos a omitir según la página
+      const skip = (page - 1) * limit;
+
+      // Filtro para buscar por query (por categoría o disponibilidad)
+      let filter = {};
+      if (query) {
+          filter = {
+              $or: [
+                  { category: query },  // Filtrar por categoría
+                  { availability: query }  // Filtrar por disponibilidad
+              ]
+          };
+      }
+
+      // Obtener los productos con el filtro y ordenamiento aplicados
+      const products = await productManager.getAllProducts(limit, skip, filter, sort);
+
+      // Obtener el total de productos para calcular el total de páginas
+      const totalProducts = await productManager.getProductCount(filter);
+      const totalPages = Math.ceil(totalProducts / limit);
+
+      // Determinar si existen páginas anteriores o siguientes
+      const hasPrevPage = page > 1;
+      const hasNextPage = page < totalPages;
+
+      // Calcular las páginas anteriores y siguientes
+      const prevPage = hasPrevPage ? page - 1 : null;
+      const nextPage = hasNextPage ? page + 1 : null;
+
+      // Construir los enlaces de las páginas
+      const prevLink = hasPrevPage ? `/products?page=${prevPage}&limit=${limit}` : null;
+      const nextLink = hasNextPage ? `/products?page=${nextPage}&limit=${limit}` : null;
+
+      // Devolver la respuesta con la estructura solicitada
+      res.json({
+          status: 'success',
+          payload: products,
+          totalPages,
+          prevPage,
+          nextPage,
+          page,
+          hasPrevPage,
+          hasNextPage,
+          prevLink,
+          nextLink,
+      });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ status: 'error', message: 'Internal server error' });
+  }
+});
+
+
+
+
+    // router.get('/', async(req, res) => {
+     
+    //   try {
+    //     const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
+    //     const products = await productManager.getAllProducts(limit);
+    //     res.json(products);
+    //     console.log(products);
+    //   }
+    //   catch (error) {
+    //     console.log(error);
+    //   }
+      
+    // });
+
+// Ruta para obtener un producto por su ID.  ---
+    router.get('/:pid', async (req, res) => {
+      //(se usa _id string de mongoatlas)
       try {
-        const productId= parseInt(req.params.pid);
+        const productId= req.params.pid;
         const product = await productManager.getProductById(productId);
         if (product === null) {
           return res.status(404).send('Producto no encontrado');
@@ -42,7 +109,7 @@ import express, { Router } from 'express';
       
        });
 
-//ruta para crear un producto
+//ruta para crear un producto     -----LISTO NUEVO
     router.post('/', async (req, res) => {
       try {
         const { title, name, description, code, price, stock, category, thumbnails } = req.body;
@@ -59,10 +126,10 @@ import express, { Router } from 'express';
       }
     });
 
-//ruta para actualizar un producto por id
+//ruta para actualizar un producto por id  -----LISTO NUEVO
     router.put('/:pid', async (req, res) => {
       try {
-        const productId= parseInt(req.params.pid);
+        const productId= req.params.pid;
         const updatedProduct = await productManager.updateProduct(productId, req.body);
         if (updatedProduct) {
           res.json(updatedProduct);
@@ -77,7 +144,7 @@ import express, { Router } from 'express';
 //ruta para eliminar un producto
     router.delete('/:pid', async (req, res) => {
       try {
-        const productId= parseInt(req.params.pid);
+        const productId= req.params.pid;
         const deletedProduct = await productManager.deleteProduct(productId);
         if (deletedProduct) {
           res.json(deletedProduct);
