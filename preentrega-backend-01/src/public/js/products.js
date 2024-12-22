@@ -92,14 +92,27 @@ function loadPage(page) {
     const params = new URLSearchParams(window.location.search);
     limit = params.get('limit') || 10;  // Obtener el parámetro 'limit' de la URL (si no existe, por defecto es 10)
     page = params.get('page') || page;  // Obtener el parámetro 'page' de la URL (si no existe, usar la página actual)
+    sort = params.get('sort')|| null;  // Obtener el parámetro 'sort' de la URL
+    const query = params.get('query') || null;  // Obtener el parámetro 'query' de la URL
+    console.log("ESTEES ES query:" ,query)
+    // Construir la URL para la llamada a la API
+    let apiUrl = `/api/products?page=${currentPage}&limit=${limit}`;
+    if (sort) apiUrl += `&sort=${sort}`;
+    if (query) apiUrl += `&query=${query}`;
 
-    fetch(`/api/products?page=${page}&limit=${limit}`)
+    // Llamada a la API
+    fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            console.log("Productos de la página:", data);
-            renderProducts(data.payload); // Renderizar productos
-            renderPagination(data.totalPages, page); // Renderizar la paginación
-            currentPage = page; // Actualizar la página actual
+            console.log("Productos obtenidos:", data);
+
+            // Renderizar los datos recibidos
+            renderProducts(data.payload);
+            renderPagination(data.totalPages, page);
+
+            // Actualizar la página actual
+            currentPage = page;
+
         })
         .catch(error => console.error("Error al cargar los productos:", error));
 }
@@ -107,7 +120,21 @@ function loadPage(page) {
 loadPage(currentPage);
 
 
+//
+// fetch(`/api/products?page=${page}&limit=${limit}&sort=${sort}&query=${query}`)
+// .then(response => response.json())
 
+// .then(data => {
+//     console.log("Productos de la página:", data);
+//     renderProducts(data.payload); // Renderizar productos
+//     renderPagination(data.totalPages, page); // Renderizar la paginación
+//     currentPage = page; // Actualizar la página actual
+// })
+// .catch(error => console.error("Error al cargar los productos:", error));
+// }
+
+
+////////////////////
 // const logData = document.getElementById('productContainer');
 
 // //------------------------------------

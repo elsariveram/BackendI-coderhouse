@@ -113,8 +113,14 @@ async getProductsByCartId(cartId) { //LISTO------NUEVO------LISTO-----------
     
     try {
         // Busca el carrito directamente en la base de datos
-        const cart = await cartModel.findOne({ _id: cartId }).populate('products.id').lean();
-        console.log("Carrito encontrado AQUI:", cart);
+        const products = await productModel.find().exec();
+        const cart = await cartModel.findOne({ _id: cartId }).populate({
+            path: 'products.id',
+            select: 'name description price stock category ',
+          });
+        console.log("Carrito encontrado AQUI:", cart.products);
+        console.log('Productos:', cart?.products?.map(item => item.id));
+        
 
         if (!cart) {
             throw new Error("Carrito no encontrado");
@@ -124,6 +130,9 @@ async getProductsByCartId(cartId) { //LISTO------NUEVO------LISTO-----------
         return cart.products.map(product => ({
             id: product.id._id, // Asegúrate de que sea el `_id` del producto
             name: product.id.name, // Otros datos del producto
+            description: product.id.description,
+            price: product.id.price,
+            stock: product.id.stock,
             quantity: product.quantity
         }));
         // return cart.products;

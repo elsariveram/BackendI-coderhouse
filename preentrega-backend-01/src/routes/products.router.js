@@ -18,10 +18,13 @@ router.get('/', async (req, res) => {
       // Obtener los parámetros de la query
       
       const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+      console.log("limit",req.query.limit)
       const page = req.query.page ? parseInt(req.query.page) : 1;
+      console.log("page",req.query.page)
       const sort = req.query.sort === 'asc' ? { price: 1 } : req.query.sort === 'desc' ? { price: -1 } : {};
+      console.log("sort",req.query.sort)
       const query = req.query.query || ''; // Filtro por categoría o disponibilidad
-      console.log("query",req.query.sort)
+      console.log("query",req.query.query)
 
       // Calcular el número de productos a omitir según la página
       const skip = (page - 1) * limit;

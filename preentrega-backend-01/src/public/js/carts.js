@@ -42,9 +42,14 @@ function renderCart(cart) {
         .map(
             (product) => `
             <div class="product">
-                <p>Producto ID: ${product.id}</p>
+                <p>Producto</p>
+                <p>ID: ${product.id}</p>
                 <p>Nombre: ${product.name}</p>
-                <p>Cantidad: ${product.quantity}</p>
+                <p>descripción: ${product.description}</p>
+                <p> stock disponible: ${product.stock}</p>
+                <p>Precio unitario: ${product.price}</p>
+                <p>Cantidad en el carrito: ${product.quantity} unidades</p>
+                
             </div>
             <br>
             <br>    
@@ -55,7 +60,7 @@ function renderCart(cart) {
         console.log ("Esto es cartHTML", cartHTML)
     // Insertar el HTML en el contenedor
     cartContainer.innerHTML = `
-        <h2>Productos en el carrito</h2>
+        <h2>Productos en el carrito: ${cid}</h2>
         ${cartHTML}
     `;
 }

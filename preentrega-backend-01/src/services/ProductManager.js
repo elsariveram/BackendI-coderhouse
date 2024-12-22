@@ -79,25 +79,7 @@ export default class ProductManager {
         }
     }
     
-    // async getAllProducts(limit) {  //DESDE AQUI ES NUEVO DE MONGODB ATLAS------------ LISTO NUEVO
-      
-    //     try {
-    //         let query = {};
     
-    //         // Si hay un límite, lo aplicamos en la consulta
-    //         if (limit) {
-    //             return await productModel.find(query).limit(limit).lean(); // Obtiene los productos con límite
-    //         }
-    
-    //         // Si no hay límite, se obtienen todos los productos
-    //         return await productModel.find(query).lean(); // Obtiene todos los productos
-    //     } catch (error) {
-    //         // Manejo de errores
-    //         console.error("Error al obtener los productos:", error.message);
-    //         throw error;
-    //     }
-            
-    // }
 
     
 
@@ -118,22 +100,7 @@ export default class ProductManager {
             console.error("Error al obtener el producto:", error.message);
             throw error;
         }
-        // const producto = this.productsAtlas.find(product => product.id == id);
         
-        // if (!producto) {
-        //     return null;
-        // }
-
-        //  return producto;
-
-         //ANTIGUO
-        //  const producto = this.products.find(product => product.id === id);
-
-        //  if (!producto) {
-        //      return null;
-        //  }
- 
-        //   return producto;
     }
 
     //addProduct (para crear un producto)  ---LISTO NUEVO
@@ -149,10 +116,7 @@ export default class ProductManager {
         } catch (error) {
             console.log("Error al crear el producto:",error);
         }
-        //ANTIGUO
-        // this.products.push(newProduct);
-        // //guardar en el archivo
-        // this.saveToFile();
+        
 
         return newProduct;
     }
@@ -167,18 +131,7 @@ export default class ProductManager {
             console.log("Error al actualizar el producto:",error);
         }
         
-        //ANTIGUO
-        // const productIndex = this.products.findIndex(product => product.id === id);
-        // if (productIndex === -1) return null;
-
-        // const updatedProduct ={
-        //     ...this.products[productIndex],
-        //     ...updatedFields,
-        //     id: this.products[productIndex].id, 
-        // };
-        // this.products[productIndex] = updatedProduct;
-        // this.saveToFile();
-        // return updatedProduct;
+        
     }
     //deleteProduct  -----LISTO NUEVO----
     async deleteProduct(id) {
@@ -190,15 +143,7 @@ export default class ProductManager {
             console.log("Error al eliminar el producto:",error);
         }
 
-        //ANTIGUO
-        // const productIndex = this.products.findIndex(product => product.id === id);
-        // if (productIndex === -1) return null;
-
-        // const deletedProduct = this.products.splice(productIndex, 1);
-
-        // this.saveToFile();
-
-        // return deletedProduct[0];
+        
     }
  
 //NUEVA FUNCION

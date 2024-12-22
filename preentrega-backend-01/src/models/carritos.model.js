@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const cartsCollection = "carritos";
 
@@ -6,8 +7,8 @@ const cartSchema = new mongoose.Schema({
     
     products: [{
         _id: false,
-        id: { type: mongoose.Schema.Types.ObjectId, ref: 'productos', required: true },
-        // { type: String, required: true },
+        id:{ type: mongoose.Schema.Types.ObjectId, ref: 'productos', required: true },
+        // // { type: String, required: true },
         quantity: {
             type: Number,
             required: true,  // La cantidad debe estar definida
@@ -15,5 +16,6 @@ const cartSchema = new mongoose.Schema({
         }
     }]
 });
+
 
 export const cartModel = mongoose.model(cartsCollection, cartSchema);
