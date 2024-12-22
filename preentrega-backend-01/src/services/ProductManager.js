@@ -1,53 +1,9 @@
-import fs from 'fs/promises';
-import path from 'path';
 
 import { productModel } from '../models/productos.model.js';
 
-
-const productosFilePath = path.resolve( 'data', 'productos.json'); //borrar y probar
-
 export default class ProductManager {
-
-    //constructor
-        constructor() {
-            this.products = []; //ANTIGUO--------ELIMINAR
-            // this.init();
-
-                ////// NUEVO----
-                this.productsAtlas = [];
-                this.init();
-           
-        }
-
-            async init() {
-                ////// NUEVO----
-                try {
-                    // obtiene todos los productos de la base de datos
-                    this.productsAtlas = await productModel.find();
-                    // console.log("Productos de la base de datos de MongoAtlas:", this.productsAtlas);
-                }
-                catch (error) {
-                    this.productsAtlas = [];
-                    console.log("Error al obtener los productos de la base de datos MongoAtlas:", error);
-                    throw error; // Lanza el error para que pueda manejarse en otro nivel
-                }
-
-///////////////////////////////////// ANTIGUO--------ELIMINAR
-                try {
-                    const data = await fs.readFile(productosFilePath, 'utf-8');
-                    this.products = JSON.parse(data);
-                } catch (error) {
-                this.products = [];
-                }
-            }
+       
     //**METODOS**
-
-    //saveToFile  ANTIGUO--------ELIMINAR
-    async saveToFile() {
-        const jasonData = JSON.stringify(this.products, null, 2);
-        await  fs.writeFile(productosFilePath, jasonData);
-    }
-
 
     //getAllProducts
     async getAllProducts(limit, skip, filter, sort) {  // Recibe limit, skip (paginación), filter (filtros) y sort (ordenamiento)
@@ -80,9 +36,6 @@ export default class ProductManager {
     }
     
     
-
-    
-
     //GetProductById   --LISTO NUEVO
     async getProductById(id) {
         

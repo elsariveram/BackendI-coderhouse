@@ -79,22 +79,6 @@ router.get('/', async (req, res) => {
 });
 
 
-
-
-    // router.get('/', async(req, res) => {
-     
-    //   try {
-    //     const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
-    //     const products = await productManager.getAllProducts(limit);
-    //     res.json(products);
-    //     console.log(products);
-    //   }
-    //   catch (error) {
-    //     console.log(error);
-    //   }
-      
-    // });
-
 // Ruta para obtener un producto por su ID.  ---
     router.get('/:pid', async (req, res) => {
       //(se usa _id string de mongoatlas)

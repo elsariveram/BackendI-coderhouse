@@ -1,9 +1,4 @@
 
-//HACER: VER VIDEO EXPLICATIVO PARA ENTENDER LOS REQUERIMIENTOS NUEVOS DEL CARRITO. Y HACER UN EXCEL PARA TODOS LOS PUNTOS
-        //POR EJEMPLO ESTO: Esta vez, para el modelo de Carts, en su propiedad products, el id de cada producto generado dentro del array tiene que hacer referencia al modelo de Products. Modificar la ruta /:cid para que al traer todos los productos, los traiga completos mediante un “populate”. De esta manera almacenamos sólo el Id, pero al solicitarlo podemos desglosar los productos asociados.
- 
-        //datos explicados por chat gpt, continuar viendo: https://chatgpt.com/share/6760f111-3e18-8001-9abb-8bdc51c6206c
-
 import { create } from 'domain';
 import fs from 'fs/promises';
 import path from 'path';
@@ -16,35 +11,9 @@ const carritosFilePath = path.resolve('data', 'carritos.json');
 
 console.log(carritosFilePath); 
 export default class CartManager {
-    //constructor
-    constructor() {
-        this.carts = []; //ANTIGUO--------ELIMINAR
-        this.cartsAtlas = [];
-        this.init();
-    }
+    
 
-    async init() {
-        ////// NUEVO---- LISTO
-        try {
-            // obtiene todos los carritos de la base de datos
-            this.cartsAtlas = await cartModel.find();
-            // console.log("Carritos de la base de datos de MongoAtlas:", this.cartsAtlas);
-            console.log("Carritos de la base de datos de MongoAtlas Adquirida", );
-        }
-        catch (error) {
-            this.cartsAtlas = [];
-            console.log("Error al obtener los carritos de la base de datos MongoAtlas:", error);
-            throw error; // Lanza el error para que pueda manejarse en otro nivel
-        }
-
-///////////////////////////////////// ANTIGUO--------ELIMINAR:
-        try {
-            const data = await fs.readFile(carritosFilePath, 'utf-8');
-            this.carts = JSON.parse(data);
-        } catch (error) {
-            this.carts = [];
-        }
-    }
+    
      //**METODOS**
 
     async saveToFile() { //ANTIGUO--------ELIMINAR-----------------
@@ -73,7 +42,7 @@ async createCart(cart) { ///----------------------------------LISTO NUEVO
       }
 
     const newCart = {
-        // cartid: this.cartsAtlas.length ? this.cartsAtlas[this.cartsAtlas.length - 1].cartid + 1 : 1,
+       
         products: [...cart],
 
     }
@@ -85,30 +54,14 @@ async createCart(cart) { ///----------------------------------LISTO NUEVO
         console.log("Error al crear el carrito:",error);
         throw error; // Lanza el error para que pueda manejarse en otro nivel
     }
-    // this.carts.push(newCart);
-    // await this.saveToFile();
+    
     return newCart;
 }
 
 
 //ruta para LISTAR los productos que pertenezcan al carrito_ GET /:cid 
 
-// async getProductsByCartId(cartId) {
-//     try {
-//         // Encuentra el carrito por su ID y usa populate para obtener los datos completos de los productos
-//         const cart = await cartModel.findById(cartId); // "id" es el campo referenciado en el esquema de Cart
 
-//         if (!cart) {
-//             throw new Error("Carrito no encontrado");
-//         }
-
-//         // Retorna los productos del carrito con los datos completos
-//         return cart.products;
-//     } catch (error) {
-//         console.error("Error al obtener los productos del carrito:", error);
-//         throw new Error("Error al buscar el carrito");
-//     }
-// }
 async getProductsByCartId(cartId) { //LISTO------NUEVO------LISTO-----------
     
     try {
@@ -141,14 +94,7 @@ async getProductsByCartId(cartId) { //LISTO------NUEVO------LISTO-----------
         console.error("Error al obtener los productos del carrito:", error.message);
         throw error;
     }
-    // this.init();
-    // const cart = this.cartsAtlas.find(cart => cart.id === cartId);
-    
-    // // const cart = this.carts.find(cart => cart.cartid === cartId);
-    // if (!cart) {
-    //     throw new Error("Carrito no encontrado");
-    // }
-    // return cart.products;
+   
 }
 
 // ruta para agregar un producto al arreglo “products” del carrito seleccionado,  _  POST  /:cid/product/:pid 
@@ -190,26 +136,7 @@ async addProductToCart(cartId, productId, quantity) {
         throw new Error("Error al agregar producto al carrito: " + error.message);
     }
 
-    ////////////////////////////
    
-    // const cart = this.carts.find(cart => cart.cartid === cartId);
-    // if (!cart) {
-    //     throw new Error("Carrito no encontrado");
-    // }
-    // const product = cart.products.find(product => product.id === productId);
-    // //si un producto ya existente intenta agregarse al producto, incrementar el campo quantity de dicho producto. 
-    // if (product) {
-    //     product.quantity += quantity; 
-    // } else {
-    //     cart.products.push({ id: productId, quantity: quantity });
-    // }
-    // // Guardar cambios en archivo y manejar errores
-    // try {
-    //     await this.saveToFile();
-    // } catch (error) {
-    //     throw new Error("Error al guardar los cambios en el archivo: " + error.message);
-    // }
-    // return cart;
 }
 // En CartManager.js
 
