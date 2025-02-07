@@ -12,7 +12,7 @@ const sessionRouter = Router();
 
 sessionRouter.get('/', getUsers)
 sessionRouter.get('/:uid', getUser)
-sessionRouter.post('/register', passport.authenticate("register"),createUser)
+sessionRouter.post('/register', passport.authenticate("register"),createUser) // passport.authenticate("register")
 sessionRouter.put('/:uid', updateUser)
 sessionRouter.delete('/:uid', deleteUser)
 // sessionRouter.post("/login", login);

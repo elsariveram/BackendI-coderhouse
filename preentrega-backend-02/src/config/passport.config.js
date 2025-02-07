@@ -8,11 +8,21 @@ import e from "express";
 import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 
+import jwt from 'passport-jwt';
 
 
 //creacion del local strategy
 
 // localStrategy = local.Strategy
+
+
+const JWTStrategy = jwt.Strategy;
+const //En proceso....
+
+
+
+
+
 
 const initializePassport = () => {
     passport.use('register', new LocalStrategy ({passReqToCallback: true, usernameField: 'email'}, async (req, username, password, done) => {

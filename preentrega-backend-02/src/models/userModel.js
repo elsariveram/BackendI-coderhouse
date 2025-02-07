@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     cart:{
          type: mongoose.Schema.Types.ObjectId,
           ref: 'carritos', 
-          required: true
+          required: false
          }, //con referencia a Carts,
     role:{
         type:String,
@@ -40,11 +40,17 @@ const userSchema = new mongoose.Schema({
 userSchema.post('save', async function name(userCreated) {
     try {
         const newCart = await cartModel.create({ products: [] });
-        userCreated.cart = newCart._id;//referencio el id del carrito con el usuario.
-        await userCreated.save();
+         // Actualiza el usuario para referenciar el nuevo carrito
+         await mongoose.model("users").findByIdAndUpdate(
+            userCreated._id,
+            { cart: newCart._id },
+            { new: true }
+        );
+        // userCreated.cart = newCart._id;//referencio el id del carrito con el usuario.
+        // await userCreated.save();
     }
     catch (error) {
-        console.log("error al crear el carrito del usuario", error);
+        console.log(error);
     }
     this.populate('cart');
 });

@@ -21,8 +21,11 @@ import fileStore from 'session-file-store';
 
 import mongoStore from 'connect-mongo';
 
-import session from 'express-session';
+import session, { Cookie } from 'express-session';
 import e from "express";
+
+import cookieParser from "cookie-parser";
+
 
 //declaramos express y asignamos el puerto
 const app = express();
@@ -32,6 +35,27 @@ const PORT = 8080;
 // parseo de JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//cookies
+app.use(cookieParser("coderSecret"));
+
+// Rutas de cookies
+app.get("/set-cookie", (req, res) => {
+    res.cookie("nombre", "Juan Pérez", { maxAge: 900000, httpOnly: true });
+    res.send("Cookie creada!");
+});
+
+app.get("/get-cookie", (req, res) => {
+    res.send(req.cookies);
+});
+
+app.get("/delete-cookie", (req, res) => {
+    res.clearCookie("nombre");
+    res.send("Cookie eliminada!");
+});
+
+
+
 
 
 //session
