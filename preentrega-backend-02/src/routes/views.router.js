@@ -18,4 +18,15 @@ router.get("/carts/:cid", (req, res) => {
     res.render("carritos");
 });
 
+router.get("/register", (req, res) => {
+    return res.status(200).render("register",{});
+});
+
+router.get("/login", (req, res) => {
+    return res.status(200).render("login",{});
+});
+
+
+
+
 export default router;

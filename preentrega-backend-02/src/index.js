@@ -7,9 +7,22 @@ import viewRouter from './routes/views.router.js'
 // Rutas de productos y carrito
 import productRouter from "./routes/products.router.js";
 import cartRouter from "./routes/carts.router.js";
+
+//passport
+import passport from 'passport';
+import { initializePassport } from "./config/passport.config.js";
+
+//ruta session
+import sessionRouter from "./routes/sessions.routes.js";
 // MOngoDB
 import mongoose from 'mongoose';
 
+import fileStore from 'session-file-store';
+
+import mongoStore from 'connect-mongo';
+
+import session from 'express-session';
+import e from "express";
 
 //declaramos express y asignamos el puerto
 const app = express();
@@ -20,6 +33,22 @@ const PORT = 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+//session
+const fileStorage= new fileStore(session)
+app.use(session({
+    store: mongoStore.create({mongoUrl: 'mongodb+srv://elsariveramarchant:cGTNQdfXXYBZJrbP@cluster0.gakmh.mongodb.net/PrimeraBaseDatosMongoAtlas?retryWrites=true&w=majority&appName=Cluster0', ttl: 15, mongoOptions: {useNewUrlParser: true, useUnifiedTopology: true}}),
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+}))
+
+mongoose.connect('mongodb+srv://elsariveramarchant:cGTNQdfXXYBZJrbP@cluster0.gakmh.mongodb.net/PrimeraBaseDatosMongoAtlas?retryWrites=true&w=majority&appName=Cluster0').then(() => { console.log("DB conectado") }).catch(err => console.log("Error de conexion a DB",err))
+
+//passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 // Confi de HBs------------------------------------
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + "/views");
@@ -32,6 +61,31 @@ app.use(express.static(__dirname + "/public"))
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter); 
 app.use('/', viewRouter) 
+app.use('/api/sessions', sessionRouter)
+// app.get('/login', (req, res) => {
+//     const {email, password} = req.body;
+//     if (email === 'admin' && password === 'admin') {
+//         req.session.email = email;
+//         req.session.user = "user";
+//         res.status(200).send('Usuario logueado');
+        
+//     } else {
+//         res.status(401).send('Usuario no autorizado');
+//     }
+// })
+// app.get('/logout', (req, res) => {
+//     req.session.destroy(err => {
+//         if (err) {
+//             res.status(500).send('Error al cerrar sesión');
+//         } else {
+//             res.status(200).send('Sesión cerrada');
+//         }
+//     });
+    
+// })
+
+//ruta usuarios
+// app.use('/api/users', userRouter)
 
 const httpServer = app.listen(PORT, () => {
     console.log(`Server run on port: ${PORT}`);
