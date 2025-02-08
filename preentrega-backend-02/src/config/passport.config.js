@@ -5,7 +5,7 @@ import { userModel } from '../models/userModel.js';
 import { createHash, isValidPassword } from "../utils.js";
 import e from "express";
 
-import { Strategy as LocalStrategy } from 'passport-local';
+// import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 
 import jwt from 'passport-jwt';
@@ -14,11 +14,11 @@ import { Cookie } from "express-session";
 
 //creacion del local strategy
 
-// localStrategy = local.Strategy
-
-
+const localStrategy = local.Strategy
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
+
+// cookieExtractor
 const cookieExtractor = (req) => {
     let token = null;
     if (req && req.cookies) {
@@ -27,17 +27,40 @@ const cookieExtractor = (req) => {
     return token
 }
 
-
-
-
-
+//configuracion de passport
 const initializePassport = () => {
-    passport.use('register', new LocalStrategy ({passReqToCallback: true, usernameField: 'email'}, async (req, username, password, done) => {
+
+    // Serialización del usuario en la sesión
+    passport.serializeUser((user, done) => {
+        done(null, user.id);
+    });
+
+    // Deserialización del usuario
+    passport.deserializeUser(async (id, done) => {
+        try {
+            const user = await userModel.findById(id);
+            done(null, user);
+        } catch (error) {
+            done(error);
+        }
+    });
+
+    //REGISTRO
+    passport.use('register', new localStrategy ({passReqToCallback: true, usernameField: 'email'}, async (req, username, password, done) => {
            try {
                 const { first_name, last_name, email, age, password, cart, role } = req.body;
                 const findUser = await userModel.findOne({ email : email });
                 if (!findUser) {
-                    const newUser = await userModel.create({ first_name, last_name, email, age, password:createHash(password), cart, role });
+                    const newUser = await userModel.create({
+                         first_name: first_name,
+                          last_name: last_name,
+                            email: email,
+                            age: age,
+                            password:createHash(password),
+                            cart: cart,
+                            role: role 
+                        
+                        });
                    
                     return done(null, newUser);
                    
@@ -49,7 +72,7 @@ const initializePassport = () => {
             } catch (error) {
                 console.log(error);
                 return done(error);
-                // res.status(500).json({ error: "Error al crear el usuario" });
+                res.status(500).json({ error: "Error al crear el usuario" });
             }
         }
     ))
@@ -60,8 +83,8 @@ const initializePassport = () => {
             return bcrypt.compareSync(inputPassword, hashedPassword);
         };
 
-        // Estrategia de login con Passport
-        passport.use('login', new LocalStrategy(
+    // Estrategia de login con Passport
+        passport.use('login', new localStrategy(
             { usernameField: 'email' }, 
             async (email, password, done) => {
                 try {
@@ -85,87 +108,27 @@ const initializePassport = () => {
             }
         ));
 
-        // Serialización del usuario en la sesión
-        passport.serializeUser((user, done) => {
-            done(null, user.id);
-        });
 
-        // Deserialización del usuario
-        passport.deserializeUser(async (id, done) => {
-            try {
-    //             //nuevo
-    //             const user = await user.findById(id);
-    // done(null, user);
-
-                //antes
-                const user = await userModel.findById(id);
-                done(null, user);
-            } catch (error) {
-                done(error);
-            }
-        });
-
+ //JWT  (AQUI PUEDE ESTAR EL ERROR)
         passport.use('jwt', new JWTStrategy({
             jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
             secretOrKey: 'super-secret-key'
-            //jwt_payload
+        
         }, async (jwt_payload, done) => {
             
             try {
 
-                const user = await userModel.findById(jwt_payload._id); // Aquí verificamos el ID
-                if (!user) {
-                    return done(null, false);
-                }
-                return done(null, user);
+                console.log(jwt_payload);
+                
+                return done(null, jwt_payload);
 
-            //     console.log(jwtPayload);
-            //    return done(null, jwtPayload._id);//se agrego ._id----------------------------
+    
             } catch (error) {
-                return done(error, false);
+                return done(error);
             }
         }));
 
-    // passport.use('login', new localStrategy ({usernameField: 'email'}, async ( username, password, done) => {
-
-    //     try {
-    //                 // Función para verificar si la contraseña ingresada es válida
-    //                 const isValidPassword = (inputPassword, hashedPassword) => {
-    //                     return bcrypt.compareSync(inputPassword, hashedPassword);
-    //                 };
-
-    //         const user = await userModel.findOne({ email: username });
-
-    //         if (user && isValidPassword(password, user.password)) {
-    //             return done(null, user);
-    //         } else {
-    //             return done(null, false);
-    //         }
-    //         // if (user && isValidPassword(password, user.password)) {
-    //         //     return done(null, user);
-
-    //             // const isPasswordValid = await bcrypt.compare(password, user.password);
-    //             // if (!isPasswordValid) {
-    //             //     return res.status(400).send('Datos incorrectos');
-    //             // }
-
-    //             // } else {
-    //             //     return done(null, false);
-    //             // }
-        
-    //  } catch (error) {
-    //     return done(error);
-    //  }
-    // }));
-    //pasos necesarios para trabajar via http en passport
-    // passport.serializeUser((user, done) => {
-    //     done(null, user._id);
-    // });
-    // passport.deserializeUser(async (id, done) => {
-    //     const user = await userModel.findById(id);
-    //     done(null, user);
-    // });
 }
 
-// export default initializePassport
+
 export { initializePassport };

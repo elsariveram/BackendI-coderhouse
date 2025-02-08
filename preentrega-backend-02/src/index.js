@@ -39,20 +39,20 @@ app.use(express.urlencoded({ extended: true }));
 //cookies
 app.use(cookieParser("coderSecret"));
 
-// Rutas de cookies
-app.get("/set-cookie", (req, res) => {
-    res.cookie("nombre", "Juan Pérez", { maxAge: 900000, httpOnly: true });
-    res.send("Cookie creada!");
-});
+// // Rutas de cookies
+// app.get("/set-cookie", (req, res) => {
+//     res.cookie("nombre", "Juan Pérez", { maxAge: 900000, httpOnly: true });
+//     res.send("Cookie creada!");
+// });
 
-app.get("/get-cookie", (req, res) => {
-    res.send(req.cookies);
-});
+// app.get("/get-cookie", (req, res) => {
+//     res.send(req.cookies);
+// });
 
-app.get("/delete-cookie", (req, res) => {
-    res.clearCookie("nombre");
-    res.send("Cookie eliminada!");
-});
+// app.get("/delete-cookie", (req, res) => {
+//     res.clearCookie("nombre");
+//     res.send("Cookie eliminada!");
+// });
 
 
 
@@ -87,30 +87,7 @@ app.use('/api/carts', cartRouter);
 app.use('/', viewRouter) 
 app.use('/api/sessions', sessionRouter)
 
-// app.get('/login', (req, res) => {
-//     const {email, password} = req.body;
-//     if (email === 'admin' && password === 'admin') {
-//         req.session.email = email;
-//         req.session.user = "user";
-//         res.status(200).send('Usuario logueado');
-        
-//     } else {
-//         res.status(401).send('Usuario no autorizado');
-//     }
-// })
-// app.get('/logout', (req, res) => {
-//     req.session.destroy(err => {
-//         if (err) {
-//             res.status(500).send('Error al cerrar sesión');
-//         } else {
-//             res.status(200).send('Sesión cerrada');
-//         }
-//     });
-    
-// })
 
-//ruta usuarios
-// app.use('/api/users', userRouter)
 
 const httpServer = app.listen(PORT, () => {
     console.log(`Server run on port: ${PORT}`);
