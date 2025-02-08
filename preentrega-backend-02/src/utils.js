@@ -19,7 +19,9 @@ const passwordEncrypted = createHash("coder")
 console.log(passwordEncrypted)
 
 const isValid = isValidPassword("coder", passwordEncrypted)
-console.log(isValid)
+
+    console.log(isValid)
+
 
 //JWT
 

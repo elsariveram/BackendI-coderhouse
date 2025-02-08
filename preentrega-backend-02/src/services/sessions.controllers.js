@@ -13,7 +13,9 @@ export const login = async (req, res) => {
     
     try {
         if (!req.user){
+            console.log("usuario o contraseña incorrectos");
             return res.status(401).send('usuario o contraseña incorrectos');
+            
         }
 
       const token=  generateToken(req.user)
@@ -24,14 +26,15 @@ export const login = async (req, res) => {
             
         }
 
-        console.log(token)
+        console.log("El token es",token)
 
         //previo a redireccionar envio la cookie
-        res.cookie('coderCookie', token, {httpOnly: true, secure: false, maxAge: 360000});
-    
+        res.cookie('coderCookie', token, {httpOnly: true, secure: false, maxAge: 360000});// Guardar en cookie
+        console.log ("Usuario logueado correctamente");
         res.status(200).send('Usuario logueado correctamente'); //redirect('/')
     } catch (error) {
         console.log(error);
+        console.log ("Error al loguear usuario");
             res.status(500).send("Error al loguear usuario");
     }
     

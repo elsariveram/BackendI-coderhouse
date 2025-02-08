@@ -2,7 +2,7 @@ import passport, { Passport } from "passport";
 import  local  from "passport-local";
 import { userModel } from '../models/userModel.js';
 
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash , isValidPassword} from "../utils.js";
 import e from "express";
 
 // import { Strategy as LocalStrategy } from 'passport-local';
@@ -24,6 +24,7 @@ const cookieExtractor = (req) => {
     if (req && req.cookies) {
         token = req.cookies['coderCookie'];//nombre de la cookie
     }
+    console.log("🔹👀 Token extraído:", token); // 👀 Verificar si el token se extrae correctamente
     return token
 }
 
@@ -79,9 +80,11 @@ const initializePassport = () => {
 
     //LOGIN
             // Función para verificar la contraseña
-        const isValidPassword = (inputPassword, hashedPassword) => {
-            return bcrypt.compareSync(inputPassword, hashedPassword);
-        };
+        // const isValidPassword = (inputPassword, hashedPassword) => {
+        //     return bcrypt.compareSync(inputPassword, hashedPassword);
+        // };
+
+
 
     // Estrategia de login con Passport
         passport.use('login', new localStrategy(
@@ -97,7 +100,9 @@ const initializePassport = () => {
 
                     // Verificar la contraseña
                     if (!isValidPassword(password, user.password)) {
+                        
                         return done(null, false, { message: "Contraseña incorrecta" });
+                        
                     }
 
                     // Si todo está bien, pasar el usuario a la sesión
