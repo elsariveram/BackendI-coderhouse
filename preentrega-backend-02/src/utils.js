@@ -34,6 +34,7 @@ export const generateToken = (user) => {
     return token
 }
 
+
 // console.log(generateToken({
 //             first_name:"e",
 //             last_name:"e",

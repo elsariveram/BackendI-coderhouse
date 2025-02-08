@@ -28,6 +28,32 @@ sessionRouter.post("/login", (req, res, next) => {
     })(req, res, next);
 });
 
-sessionRouter.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => res.send(req.user)); 
+
+// sessionRouter.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => res.send(req.user)); 
+
+// sessionRouter.get('/current', (req, res, next) => {
+//     passport.authenticate('jwt', { session: false }, (err, user, info) => {
+//         if (err) return next(err); // Error interno de Passport
+
+//         if (!user) {
+//             return res.status(401).json({ error: info?.message || "No autorizado. Token inválido o expirado." });
+//         }
+
+//         res.json({ user });
+//     })(req, res, next);
+// });
+sessionRouter.get(
+    "/current",
+    (req, res, next) => {
+      console.log("Middleware antes de Passport");
+      next();
+    },
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => {
+      console.log("Usuario autenticado:", req.user);
+      res.send(req.user);
+    }
+  );
+  
 
 export default sessionRouter;
