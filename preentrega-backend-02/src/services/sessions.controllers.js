@@ -16,7 +16,9 @@ export const login = async (req, res) => {
         req.session.user = {
             email: req.user.email,
             first_name: req.user.first_name,
+            
         }
+    
         res.status(200).send('Usuario logueado correctamente');
     } catch (error) {
         console.log(error);

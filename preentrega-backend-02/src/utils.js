@@ -23,17 +23,22 @@ console.log(isValid)
 
 //JWT
 
-let secretKey = 'coderhouse'
+let secretKey = 'super-secret-key'
 const generateToken = (user) => {
     //parametro1: objeto a guardar (user) , param2: clave privada, param 3: tiempo de vida del token.
-    const token = jwt.sign(user, secretKey, {expiresIn: '1h'});
+    const token = jwt.sign(
+        { _id: user._id, email: user.email, role: user.role }, 
+        secretKey, 
+        { expiresIn: '1h' }
+    )
+    // antes era (user, secretKey, {expiresIn: '1h'});
     return token
 }
 
 console.log(generateToken({
-            first_name:"John",
-            last_name:"Doe",
-            email:"johndoe@example.com",
-            age: 30,
+            first_name:"e",
+            last_name:"e",
+            email:"e@example.com",
+            age: 19,
             role: "user"        
     })) 

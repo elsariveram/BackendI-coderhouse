@@ -17,6 +17,19 @@ sessionRouter.put('/:uid', updateUser)
 sessionRouter.delete('/:uid', deleteUser)
 // sessionRouter.post("/login", login);
 sessionRouter.post("/login", passport.authenticate("login"), login);
+// sessionRouter.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => res.send(req.user)); 
+// sessionRouter.get("/current", passport.authenticate("jwt", { session: false }), (req, res) => {
+//     console.log("Usuario autenticado:", req.user);
+//     if (!req.user) {
+//         return res.status(401).json({ error: "No autorizado" });
+//     }
+//     res.send(req.user);
+// });
+sessionRouter.get('/current', (req, res) => {
+    console.log("🔹 Se accedió a la ruta /current");
+    res.send({ message: "Ruta accesible sin Passport" });
+});
+
 
 
 

@@ -9,6 +9,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 
 import jwt from 'passport-jwt';
+import { Cookie } from "express-session";
 
 
 //creacion del local strategy
@@ -17,8 +18,14 @@ import jwt from 'passport-jwt';
 
 
 const JWTStrategy = jwt.Strategy;
-const //En proceso....
-
+const ExtractJWT = jwt.ExtractJwt;
+const cookieExtractor = (req) => {
+    let token = null;
+    if (req && req.cookies) {
+        token = req.cookies['coderCookie'];//nombre de la cookie
+    }
+    return token
+}
 
 
 
@@ -86,6 +93,11 @@ const initializePassport = () => {
         // Deserialización del usuario
         passport.deserializeUser(async (id, done) => {
             try {
+    //             //nuevo
+    //             const user = await user.findById(id);
+    // done(null, user);
+
+                //antes
                 const user = await userModel.findById(id);
                 done(null, user);
             } catch (error) {
@@ -93,7 +105,26 @@ const initializePassport = () => {
             }
         });
 
+        passport.use('jwt', new JWTStrategy({
+            jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+            secretOrKey: 'super-secret-key'
+            //jwt_payload
+        }, async (jwt_payload, done) => {
+            
+            try {
 
+                const user = await userModel.findById(jwt_payload._id); // Aquí verificamos el ID
+                if (!user) {
+                    return done(null, false);
+                }
+                return done(null, user);
+
+            //     console.log(jwtPayload);
+            //    return done(null, jwtPayload._id);//se agrego ._id----------------------------
+            } catch (error) {
+                return done(error, false);
+            }
+        }));
 
     // passport.use('login', new localStrategy ({usernameField: 'email'}, async ( username, password, done) => {
 
@@ -127,13 +158,13 @@ const initializePassport = () => {
     //  }
     // }));
     //pasos necesarios para trabajar via http en passport
-    passport.serializeUser((user, done) => {
-        done(null, user._id);
-    });
-    passport.deserializeUser(async (id, done) => {
-        const user = await userModel.findById(id);
-        done(null, user);
-    });
+    // passport.serializeUser((user, done) => {
+    //     done(null, user._id);
+    // });
+    // passport.deserializeUser(async (id, done) => {
+    //     const user = await userModel.findById(id);
+    //     done(null, user);
+    // });
 }
 
 // export default initializePassport

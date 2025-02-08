@@ -86,6 +86,7 @@ app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter); 
 app.use('/', viewRouter) 
 app.use('/api/sessions', sessionRouter)
+
 // app.get('/login', (req, res) => {
 //     const {email, password} = req.body;
 //     if (email === 'admin' && password === 'admin') {
