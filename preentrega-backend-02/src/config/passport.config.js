@@ -1,3 +1,6 @@
+// para .env (guardar contraseñas y datos no publicos)
+import "dotenv/config";
+//passport
 import passport, { Passport } from "passport";
 import  local  from "passport-local";
 import { userModel } from '../models/userModel.js';
@@ -28,12 +31,28 @@ const cookieExtractor = (req) => {
     return token
 }
 
+//Middleware para errores de passport
+export const passportCall =  (strategy) => {
+    return async(req,res,next) => {
+        
+        passport.authenticate(strategy, function(err,user, info) {
+            if(err) return next(err)
+            
+            if(!user) {
+                return res.status(401).send({error: info.messages?info.messages: info.toString()})
+            }
+            req.user = user
+            next()
+        } (req,res,next))
+    }
+}
+
 //configuracion de passport
 const initializePassport = () => {
 
     // Serialización del usuario en la sesión
     passport.serializeUser((user, done) => {
-        done(null, user.id);
+        done(null, user._id)
     });
 
     // Deserialización del usuario
@@ -117,7 +136,7 @@ const initializePassport = () => {
  //JWT  (AQUI PUEDE ESTAR EL ERROR)
         passport.use('jwt', new JWTStrategy({
             jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-            secretOrKey: 'super-secret-key'
+            secretOrKey: process.env.JWT_SECRET
         
         }, async (jwt_payload, done) => {
             
@@ -125,7 +144,7 @@ const initializePassport = () => {
 
                 console.log(jwt_payload);
                 
-                return done(null, jwt_payload);
+                return done(null, jwt_payload.user);//nuevo agrego .user
 
     
             } catch (error) {

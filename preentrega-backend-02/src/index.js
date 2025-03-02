@@ -1,3 +1,6 @@
+// para .env (guardar contraseñas y datos no publicos)
+import "dotenv/config";
+//
 import express from "express";
 import handlebars from 'express-handlebars';
 import __dirname from "./utils.js";
@@ -37,7 +40,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //cookies
-app.use(cookieParser("coderSecret"));
+app.use(cookieParser(process.env.SECRET_COOKIE));
 
 // // Rutas de cookies
 // app.get("/set-cookie", (req, res) => {
@@ -61,13 +64,24 @@ app.use(cookieParser("coderSecret"));
 //session
 const fileStorage= new fileStore(session)
 app.use(session({
-    store: mongoStore.create({mongoUrl: 'mongodb+srv://elsariveramarchant:cGTNQdfXXYBZJrbP@cluster0.gakmh.mongodb.net/PrimeraBaseDatosMongoAtlas?retryWrites=true&w=majority&appName=Cluster0', ttl: 15, mongoOptions: {useNewUrlParser: true, useUnifiedTopology: true}}),
-    secret: 'secret',
+    store: mongoStore.create({mongoUrl: 'mongodb+srv://elsariveramarchant:cGTNQdfXXYBZJrbP@cluster0.gakmh.mongodb.net/PrimeraBaseDatosMongoAtlas?retryWrites=true&w=majority&appName=Cluster0', ttl: 150000000, mongoOptions: {useNewUrlParser: true, useUnifiedTopology: true}}),
+    secret: process.env.SECRET_SESSION,
     resave: true,
     saveUninitialized: true,
 }))
+//CONNECT MONGO DB
 
-mongoose.connect('mongodb+srv://elsariveramarchant:cGTNQdfXXYBZJrbP@cluster0.gakmh.mongodb.net/PrimeraBaseDatosMongoAtlas?retryWrites=true&w=majority&appName=Cluster0').then(() => { console.log("DB conectado") }).catch(err => console.log("Error de conexion a DB",err))
+
+
+const connectMongoDB = async () => {
+    try {
+       await mongoose.connect(process.env.URL_MONGO);
+       console.log("Conectado a la base de datos de Mongo Atlas");
+    } catch (error) {
+        console.log("Error al conectar a la base de datos:", error);
+    };}
+
+connectMongoDB();
 
 //passport
 initializePassport();
@@ -165,15 +179,4 @@ socketServer.on('connection', socket => {
 })
 
 
-//CONNECT MONGO DB
 
-const DBPATH = 'mongodb+srv://elsariveramarchant:cGTNQdfXXYBZJrbP@cluster0.gakmh.mongodb.net/PrimeraBaseDatosMongoAtlas?retryWrites=true&w=majority&appName=Cluster0';
-const connectMongoDB = async () => {
-    try {
-       await mongoose.connect(DBPATH);
-       console.log("Conectado a la base de datos de Mongo Atlas");
-    } catch (error) {
-        console.log("Error al conectar a la base de datos:", error);
-    };}
-
-connectMongoDB();

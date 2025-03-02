@@ -2,10 +2,14 @@ import { Router } from "express"
 
 import passport from "passport";
 
-import {  getUsers, createUser, updateUser, deleteUser, login } from "../services/sessions.controllers.js";
+import {  getUsers, createUser, updateUser, deleteUser, login , viewLogin, viewRegister} from "../services/sessions.controllers.js";
+
+import { authorization } from "../config/middlewares.js";
 
 const sessionRouter = Router();
 
+sessionRouter.get('/viewlogin', viewLogin)
+sessionRouter.get('/viewregister', viewRegister)
 // sessionRouter.get('/:uid', getUser) //lo quite
 sessionRouter.get('/', getUsers) 
 sessionRouter.post('/register', passport.authenticate("register"),createUser) // quite passport.authenticate("register")
@@ -29,27 +33,15 @@ sessionRouter.post("/login", (req, res, next) => {
 });
 
 
-// sessionRouter.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => res.send(req.user)); 
-
-// sessionRouter.get('/current', (req, res, next) => {
-//     passport.authenticate('jwt', { session: false }, (err, user, info) => {
-//         if (err) return next(err); // Error interno de Passport
-
-//         if (!user) {
-//             return res.status(401).json({ error: info?.message || "No autorizado. Token inválido o expirado." });
-//         }
-
-//         res.json({ user });
-//     })(req, res, next);
-// });
+//ruta current--------------------
 sessionRouter.get(
     "/current",
-    (req, res, next) => {
-      console.log("Middleware antes de Passport");
-      next();
-    },
-    passport.authenticate("jwt", { session: false }),
-    (req, res) => {
+    // (req, res, next) => {
+    //   console.log("Middleware antes de Passport");
+    //   next();
+    // },
+    passport.authenticate("jwt", { session: false }), authorization("user"),
+    async (req, res) => {  //async nuevo
       console.log("Usuario autenticado:", req.user);
       res.send(req.user);
     }

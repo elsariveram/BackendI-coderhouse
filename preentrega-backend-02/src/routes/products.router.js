@@ -1,6 +1,7 @@
 // import express from 'express';
 import ProductManager from '../services/ProductManager.js';
 import express, { Router } from 'express';
+import { authorization } from '../config/middlewares.js';
 
   //  router para productos
     const router = Router();
@@ -97,7 +98,7 @@ router.get('/', async (req, res) => {
        });
 
 //ruta para crear un producto     -----LISTO NUEVO
-    router.post('/', async (req, res) => {
+    router.post('/', authorization("admin"), async (req, res) => {
       try {
         const { title, name, description, code, price, stock, category, thumbnails } = req.body;
         if ( !title || !name || !description || !code || !price || !stock || !category) {
@@ -114,7 +115,7 @@ router.get('/', async (req, res) => {
     });
 
 //ruta para actualizar un producto por id  -----LISTO NUEVO
-    router.put('/:pid', async (req, res) => {
+    router.put('/:pid', authorization("admin"), async (req, res) => {
       try {
         const productId= req.params.pid;
         const updatedProduct = await productManager.updateProduct(productId, req.body);
@@ -129,7 +130,7 @@ router.get('/', async (req, res) => {
     });
 
 //ruta para eliminar un producto
-    router.delete('/:pid', async (req, res) => {
+    router.delete('/:pid', authorization("admin"),  async (req, res) => {
       try {
         const productId= req.params.pid;
         const deletedProduct = await productManager.deleteProduct(productId);

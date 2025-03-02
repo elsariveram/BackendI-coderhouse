@@ -1,5 +1,6 @@
 import express, { Router } from "express";
-import CartManager from "../services/CartsManager.js";
+import CartManager, { checkout } from "../services/CartsManager.js";
+import { authorization } from "../config/middlewares.js";
 
     //router para carritos
     const router = Router();
@@ -9,7 +10,7 @@ import CartManager from "../services/CartsManager.js";
 //TODAS LAS APIS------------------------
 
 //ruta para CREAR un carrito _ POST /
-router.post('/', async (req, res) => {
+router.post('/', authorization("user"), async (req, res) => {
     try {
        
 
@@ -39,7 +40,7 @@ router.get('/:cid', async (req, res) => {
 });
 // ruta para agregar el producto al arreglo “products” del carrito seleccionado,  _  POST  /:cid/product/:pid 
 
-router.post('/:cid/product/:pid', async (req, res) => {
+router.post('/:cid/product/:pid', authorization("user"), async (req, res) => {
     try {
         const cartId = req.params.cid;
         const productId =req.params.pid;
@@ -56,7 +57,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
 })
 
 // Ruta para eliminar todos los productos de un carrito
-router.delete('/:cid', async (req, res) => {
+router.delete('/:cid', authorization("user"), async (req, res) => {
     try {
         const cartId = req.params.cid;
         const clearedCart = await cartManager.clearCart(cartId);
@@ -71,7 +72,7 @@ router.delete('/:cid', async (req, res) => {
 });
 
 // Ruta para eliminar un producto del carrito
-router.delete('/:cid/products/:pid', async (req, res) => {
+router.delete('/:cid/products/:pid', authorization("user"), async (req, res) => {
     try {
         const cartId = req.params.cid;
         const productId = req.params.pid;
@@ -87,7 +88,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
 });
 
 //actualiza el carrito con un nuevo arreglo de productos.-----------------------------------------
-router.put('/:cid', async (req, res) => {
+router.put('/:cid', authorization("user"), async (req, res) => {
     try {
         const cartId = req.params.cid;
         const products = req.body.products; // Se espera un arreglo de productosen la solicitud
@@ -105,7 +106,7 @@ router.put('/:cid', async (req, res) => {
     }
 });
 ////// Para actualizar solo la cantidad de un producto.
-router.put('/:cid/products/:pid', async (req, res) => {
+router.put('/:cid/products/:pid', authorization("user"), async (req, res) => {
     try {
         const cartId = req.params.cid;
         const productId = req.params.pid;
@@ -123,6 +124,10 @@ router.put('/:cid/products/:pid', async (req, res) => {
         res.status(500).json({ error: "Error al actualizar la cantidad del producto" });
     }
 });
+
+//RUTA CHECKOUT CARRITO -------------FINALIZAR COMPRA------------------------
+
+router.post('/:cid/checkout', authorization("user"), checkout);
 
 
 export default router

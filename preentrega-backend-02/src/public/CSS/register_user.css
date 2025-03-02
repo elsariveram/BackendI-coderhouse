@@ -1,0 +1,108 @@
+/* Estilos para el encabezado */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ff6600; /* Naranja */
+    padding: 15px 20px;
+    color: white;
+}
+
+/* Estilo del título de la tienda */
+.store-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardRegister {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.cardRegister h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: calc(100% - 20px);
+    padding: 8px 10px;
+    font-size: 0.9em;
+}
+
+.form-control:focus {
+    border-color: #fd8433;
+    box-shadow: 0 0 5px rgba(253, 132, 51, 0.5);
+}
+
+.btn-primary {
+    background-color: #fd8433;
+    border-color: #fd8433;
+    font-weight: bold;
+    color: #fff;
+    padding: 10px;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background-color: #ff9752;
+    border-color: #ff9752;
+}
+
+.text-center a {
+    color: #fd8433;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.text-center a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 500px) {
+    .cardRegister {
+        padding: 15px;
+    }
+
+    .cardRegister h2 {
+        font-size: 1.2em;
+    }
+
+    .form-control {
+        font-size: 0.85em;
+    }
+
+    .btn-primary {
+        font-size: 0.9em;
+    }
+}

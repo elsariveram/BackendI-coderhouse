@@ -6,7 +6,7 @@ const logData = document.getElementById('productContainer');
 function renderProducts(products) {
     // Limpiar el contenedor antes de insertar nuevos productos
     logData.innerHTML = '';
-
+    console.log(products);
     // Iterar sobre la lista de productos y generar el HTML
     products.forEach(product => {
         const productHTML = `
@@ -21,6 +21,7 @@ function renderProducts(products) {
                 <p><span>Precio:</span> $${product.price}</p>
                 <p><span>Stock:</span> ${product.stock}</p>
                 <p><span>Categoría:</span> ${product.category}</p>
+                 <a href="/products/${product._id}" class="view-product">Ver Producto</a>
                
             </div>
         </div>`;
@@ -36,8 +37,15 @@ fetch('/api/products')
     .then(response => response.json())
     .then(products => {
         console.log("Productos iniciales:", products);
-        renderProducts(products);
+        renderProducts(products.payload);  // Aquí pasamos solo el array de productos
     })
     .catch(error => console.error("Error al cargar los productos iniciales:", error));
+// fetch('/api/products')
+//     .then(response => response.json())
+//     .then(products => {
+//         console.log("Productos iniciales:", products);
+//         renderProducts(products);
+//     })
+//     .catch(error => console.error("Error al cargar los productos iniciales:", error));
 
 

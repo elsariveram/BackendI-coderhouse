@@ -26,6 +26,7 @@ function renderProducts(products) {
                 <p><span>Precio:</span> $${product.price}</p>
                 <p><span>Stock:</span> ${product.stock}</p>
                 <p><span>Categoría:</span> ${product.category}</p>
+                 <a href="/products/${product._id}" class="view-product">Ver Producto</a>
                 <button class="add-to-cart" data-id="${product.id}">Agregar al carrito</button>
             </div>
         </div>`;
@@ -34,8 +35,14 @@ function renderProducts(products) {
 
     // Agregar eventos a los botones "Agregar al carrito"
     document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', handleAddToCart);
+        button.addEventListener('click', (event) => {
+            const productId = event.target.getAttribute("data-id");
+            handleAddToCart(productId);
+        });
     });
+    // document.querySelectorAll('.add-to-cart').forEach(button => {
+    //     button.addEventListener('click', handleAddToCart);
+    // });
 }
 
 function handleAddToCart(productId) {
@@ -52,6 +59,7 @@ function renderPagination(totalPages, page) {
     if (page > 1) {
         const prevButton = document.createElement('button');
         prevButton.textContent = 'Anterior';
+        prevButton.classList.add('pagination-button', 'prev-button');
         prevButton.addEventListener('click', () => loadPage(page - 1));
         paginationContainer.appendChild(prevButton);
     }
@@ -59,12 +67,14 @@ function renderPagination(totalPages, page) {
     // Mostrar la página actual
     const pageInfo = document.createElement('span');
     pageInfo.textContent = `Página ${page} de ${totalPages}`;
+    pageInfo.classList.add('page-info');
     paginationContainer.appendChild(pageInfo);
 
     // Botón de página siguiente
     if (page < totalPages) {
         const nextButton = document.createElement('button');
         nextButton.textContent = 'Siguiente';
+        nextButton.classList.add('pagination-button', 'next-button');
         nextButton.addEventListener('click', () => loadPage(page + 1));
         paginationContainer.appendChild(nextButton);
     }

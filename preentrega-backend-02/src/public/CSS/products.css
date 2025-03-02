@@ -1,0 +1,150 @@
+/* Estilos para el encabezado */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ff6600; /* Naranja */
+    padding: 15px 20px;
+    color: white;
+}
+
+/* Estilo del título de la tienda */
+.store-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Estilo de los enlaces de navegación */
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Efecto hover en los enlaces */
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+
+
+.product-card {
+    width: 100%;
+    max-width: 400px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 15px auto;
+    transition: transform 0.2s ease-in-out;
+}
+
+.product-card:hover {
+    transform: scale(1.02);
+}
+
+.product-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.product-image img {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background-color: #ffffff;
+}
+
+.product-details p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+.product-details span {
+    font-weight: bold;
+    color: #fd8433;
+}
+
+@media (max-width: 500px) {
+    .product-card {
+        padding: 15px;
+    }
+
+    .product-details p {
+        font-size: 0.85rem;
+    }
+       .add-to-cart {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+}
+
+
+.add-to-cart {
+    background-color: #fd8433;
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding: 10px 15px;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.add-to-cart:hover {
+    background-color: #ff9752;
+    transform: scale(1.05);
+}
+
+.add-to-cart:active {
+    background-color: #e56f20;
+    transform: scale(0.98);
+}
+ /* pagination */
+/* Estilo común para todos los botones de paginación */
+.pagination-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.pagination-button:hover {
+    background-color: #ffff91;
+    transform: scale(1.05);
+}
+
+/* Estilo específico para el botón "Anterior" */
+.prev-button {
+    background-color:  #e56f20; 
+}
+
+/* Estilo específico para el botón "Siguiente" */
+.next-button {
+    background-color:  #e56f20; 
+}
+
+/* Estilo para la información de la página */
+.page-info {
+    font-size: 24px;
+    margin: 0 10px;
+}
