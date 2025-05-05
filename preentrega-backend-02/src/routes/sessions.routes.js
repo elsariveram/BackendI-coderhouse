@@ -11,8 +11,8 @@ const sessionRouter = Router();
 sessionRouter.get('/viewlogin', viewLogin)
 sessionRouter.get('/viewregister', viewRegister)
 // sessionRouter.get('/:uid', getUser) //lo quite
-sessionRouter.get('/', getUsers) 
-sessionRouter.post('/register', passport.authenticate("register"),createUser) // quite passport.authenticate("register")
+sessionRouter.get('/', getUsers) //ok
+sessionRouter.post('/register', passport.authenticate("register"),createUser) // 
 sessionRouter.put('/:uid', updateUser)
 sessionRouter.delete('/:uid', deleteUser)
 // sessionRouter.post("/login", passport.authenticate("login"), login);

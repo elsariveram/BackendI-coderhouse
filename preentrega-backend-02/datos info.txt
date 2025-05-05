@@ -1,0 +1,24 @@
+A considerar: 
+-Mi proyecto esta adaptado del backend I, el archivo utils tiene bcrypt y hasheo y genera el token jwt. 
+-En la carpeta services están los controllers, que en backend I lo llamamos Manager,  
+-El handlebars de register de usuario se llama register_user, lo mismo que el js y css publico, ya que del backendI ya tenia un archivo register para registrar productos. 
+-intenté implementar el main handlebars, pero ya tenia un index handlebars creado. no quise complicarme en adaptarlo.
+
+
+Ruta para agregar px a carrito:	
+post	http://localhost:8080/api/carts/67c45ed1dc5c15b79d6fb3ba/product/676721d81b055a7725d777e5
+	{
+	"quantity": 2
+	}
+
+Dato de login:
+{
+"first_name": "simon",
+"last_name": "simon",
+"email": "simon.perez@example.com",
+"age": 30,
+"password": "lulita",
+"role": "user"
+
+}
+

@@ -1,0 +1,202 @@
+paths:
+  /api/sessions/:
+    get:
+      summary: Traer todos los usuarios
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Lista de usuarios obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "500":
+          description: Error del servidor
+
+  /api/sessions/register:
+    post:
+      summary: Registrar un nuevo usuario
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/CreateUser"
+      responses:
+        "201":
+          description: Usuario registrado exitosamente
+        "400":
+          description: Datos inválidos o usuario ya existente
+
+  /api/sessions/login:
+    post:
+      summary: Login de usuario
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: usuario@example.com
+                password:
+                  type: string
+                  example: 123456
+      responses:
+        "200":
+          description: Login exitoso, devuelve datos del usuario y token
+        "401":
+          description: Usuario o contraseña incorrectos
+
+  /api/sessions/{uid}:
+    put:
+      summary: Actualizar datos de un usuario
+      description: Actualiza nombre, apellido, correo y edad de un usuario existente.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/UpdateUser"
+      responses:
+        "200":
+          description: Usuario actualizado correctamente
+        "404":
+          description: Usuario no encontrado
+
+    delete:
+      summary: Eliminar un usuario
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario a eliminar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuario eliminado correctamente
+        "404":
+          description: Usuario no encontrado
+
+  /api/sessions/current:
+    get:
+      summary: Verifica si el usuario sigue autenticado con un token JWT y obtiene su información
+
+
+      description: >
+        Esta ruta permite saber si el usuario ya inició sesión y sigue autenticado. 
+        Si el token JWT es válido, devuelve los datos del usuario sin necesidad de volver a iniciar sesión.
+     
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Usuario autenticado. Se devuelve su información.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Token inválido o no proporcionado. El usuario no está autenticado.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID de usuario (MongoDB)
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+        role:
+          type: string
+        cart:
+          type: string
+          description: ID del carrito asociado
+      example:
+        _id: "64f1a6c3ad312a001f8d27d1"
+        first_name: Mauricio
+        last_name: Espinosa
+        email: mauri1999@correo.com
+        age: 25
+        role: user
+        cart: "64f1a6c3ad312a001f8d27d2"
+
+  requestBodies:
+    CreateUser:
+      type: object
+      required:
+        - first_name
+        - email
+        - age
+        - password
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+        password:
+          type: string
+      example:
+        first_name: Elsa
+        last_name: Rivera
+        email: nuevo@correo.com
+        age: 28
+        password: miClaveSegura
+
+    UpdateUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+      example:
+        first_name: Elsi
+        last_name: River
+        email: nuevo@correo.com
+        age: 28

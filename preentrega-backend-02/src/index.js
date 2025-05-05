@@ -1,3 +1,7 @@
+//para swagger
+import swaggerUiExpress from 'swagger-ui-express';
+import swaggerJsDoc from 'swagger-jsdoc';
+
 // para .env (guardar contraseñas y datos no publicos)
 import "dotenv/config";
 //
@@ -82,6 +86,23 @@ const connectMongoDB = async () => {
     };}
 
 connectMongoDB();
+
+//configuracion de swagger
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "Documentacion de la API",
+            version: "1.0.0",
+            description: "Documentacion de la API de Sessions para usuarios",
+        },
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+    
+}
+
+const specs = swaggerJsDoc(swaggerOptions);
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs)); //ruta swagger ApiDocs
 
 //passport
 initializePassport();

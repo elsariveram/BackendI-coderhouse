@@ -112,20 +112,42 @@ export const createUser = async (req, res) => {
 
 //actualizar usuario dado su ID
 export const updateUser = async (req, res) => {
-
     try {
-    const userId = req.params.uid;
-    const { name, email, age } = req.body;
-    const message = await userModel.findByIdAndUpdate(idUser, { name, email, age } );
-    if (!message) {
+      const userId = req.params.uid;
+      const { first_name, last_name, email, age } = req.body;
+  
+      const updatedUser = await userModel.findByIdAndUpdate(
+        userId,
+        { first_name, last_name, email, age },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
         return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+  
+      res.status(200).json({ message: "Usuario actualizado", user: updatedUser });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Error al actualizar el usuario" });
     }
-    res.status(200).send("usuario actualizado", message);
-} catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Error al actualizar el usuario" });
-}
-}
+  };
+  
+// export const updateUser = async (req, res) => {
+
+//     try {
+//     const userId = req.params.uid;
+//     const { name, email, age } = req.body;
+//     const message = await userModel.findByIdAndUpdate(idUser, { name, email, age } );
+//     if (!message) {
+//         return res.status(404).json({ error: "Usuario no encontrado" });
+//     }
+//     res.status(200).send("usuario actualizado", message);
+// } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ error: "Error al actualizar el usuario" });
+// }
+// }
 
 //Eliminar usuario dado su ID
 export const deleteUser = async (req, res) => {
@@ -136,7 +158,7 @@ export const deleteUser = async (req, res) => {
         if (!deletedUser) {
             return res.status(404).json({ error: "Usuario no encontrado" });
         }
-        res.status(200).send("usuario eliminado", deletedUser);
+        res.status(200).json({ message: "usuario eliminado", deletedUser});
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Error al eliminar el usuario" });
